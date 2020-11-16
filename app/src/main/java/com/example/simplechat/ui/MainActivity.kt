@@ -1,25 +1,29 @@
 package com.example.simplechat.ui
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
-import android.net.Uri
-import android.os.Build
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.widget.ListView
-import android.widget.SimpleCursorAdapter
 import com.example.simplechat.R
 import com.example.simplechat.data.ContactAdapter
 import com.example.simplechat.entity.Contact
+import com.example.simplechat.tool.FirebaseUtil
+import com.google.firebase.firestore.FirebaseFirestore
 import com.yanzhenjie.permission.Action
 import com.yanzhenjie.permission.AndPermission
 import com.yanzhenjie.permission.runtime.Permission
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var listContact : ListView
+    private lateinit var contactList : ListView
     private val contacts = ArrayList<Contact>()
+
+    private lateinit var db: FirebaseFirestore
+    private val tag : String = "Firebase"
+    private val KEY_NAME : String = "name"
+    private val KEY_NUMBER : String = "phoneNumber"
 
     companion object{
         private const val CONTACT_ID_INDEX: Int = 0
@@ -38,18 +42,34 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initData()
+//        test()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        initFireBase()
+        loadDataTest()
     }
 
     /** Initialize main view**/
     fun initView() {
         val adapter = ContactAdapter(this,R.layout.contact_item, contacts)
-        listContact = findViewById(R.id.main_list)
-        listContact.adapter = adapter
+        contactList = findViewById(R.id.list_main)
+        contactList.adapter = adapter
+        contactList.setOnItemClickListener { parent, view, position, id ->
+            var intent = Intent(this, ChatActivity::class.java)
+            startActivity(intent)
+        }
+    }
+
+    fun test(){
+        FirebaseUtil.initFireBase()
+//        FirebaseUtil.uploadDataTest()
+        FirebaseUtil.loadDataTest()
     }
 
     /** Request for permission and initialize data**/
     fun initData(){
-        var builder = StringBuilder()
         // Get Contact permission at runtime
         AndPermission.with(this)
             .runtime()
@@ -104,6 +124,41 @@ class MainActivity : AppCompatActivity() {
         }
         cursor.close()
         return
+    }
+
+    fun initFireBase(){
+        Log.i(tag, "Main Firebase initializing......")
+
+        db =  FirebaseFirestore.getInstance()
+        var docRef = db.collection("Contact").document("contact")
+        docRef.addSnapshotListener{snapshot, e ->
+            if (e != null){
+                Log.i(tag, "Update Error! ")
+                return@addSnapshotListener
+            }
+            if (snapshot != null && snapshot.exists()) {
+                Log.i(tag, "Message:" + snapshot.getString(KEY_NAME))
+                Log.i(tag, "Message:" + snapshot.getString(KEY_NUMBER))
+            } else {
+                Log.d(tag, "Current data: null")
+            }
+        }
+    }
+
+    fun loadDataTest(){
+        Log.i(tag, "retrieve testing......")
+
+        var docRef = db.collection("Contact").document("contact")
+        docRef.get().addOnSuccessListener {
+            if(it.exists()){
+                Log.i(tag, "Message:" + it.getString(KEY_NAME))
+                Log.i(tag, "Message:" + it.getString(KEY_NUMBER))
+            }else{
+                Log.i(tag, "Null exist")
+            }
+        }.addOnFailureListener {
+            Log.i(tag, "Error load document") }
+
     }
 
 

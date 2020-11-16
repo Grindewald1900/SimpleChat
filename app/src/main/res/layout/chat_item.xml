@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dimen_80">
+    android:layout_height="@dimen/dimen_60">
     <com.kproduce.roundcorners.CircleImageView
         android:id="@+id/contact_img"
         android:layout_width="@dimen/dimen_50"
@@ -13,27 +13,17 @@
         android:src="@drawable/photo1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
+        app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
-        android:id="@+id/contact_name"
+        android:id="@+id/chat_message"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Harry potter"
         android:layout_marginLeft="@dimen/dimen_20"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/contact_message"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/contact_img"
         />
 
-    <TextView
-        android:id="@+id/contact_message"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Yep, I have some..."
-        app:layout_constraintTop_toTopOf="@id/contact_name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/contact_name"
-        />
 </androidx.constraintlayout.widget.ConstraintLayout>
