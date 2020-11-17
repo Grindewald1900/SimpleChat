@@ -9,18 +9,21 @@ import android.util.Log
 import android.widget.ListView
 import com.example.simplechat.R
 import com.example.simplechat.data.ContactAdapter
+import com.example.simplechat.data.SharedPreferenceUtil
 import com.example.simplechat.entity.Contact
 import com.example.simplechat.tool.FirebaseUtil
 import com.google.firebase.firestore.FirebaseFirestore
 import com.yanzhenjie.permission.Action
 import com.yanzhenjie.permission.AndPermission
 import com.yanzhenjie.permission.runtime.Permission
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var contactList : ListView
     private val contacts = ArrayList<Contact>()
+    private lateinit var userName:String
 
-    private lateinit var db: FirebaseFirestore
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val tag : String = "Firebase"
     private val KEY_NAME : String = "name"
     private val KEY_NUMBER : String = "phoneNumber"
@@ -45,31 +48,39 @@ class MainActivity : AppCompatActivity() {
 //        test()
     }
 
-    override fun onStart() {
-        super.onStart()
-        initFireBase()
-        loadDataTest()
-    }
-
     /** Initialize main view**/
     fun initView() {
         val adapter = ContactAdapter(this,R.layout.contact_item, contacts)
+        userName= SharedPreferenceUtil.getSharedPreference(this, SharedPreferenceUtil.USER_NAME, "")
+        if(userName == "") {
+            userName = intent.getStringExtra(SharedPreferenceUtil.USER_NAME) ?: "null"
+        }
+        main_user_name.text = userName
+        loadChats(userName)
+
         contactList = findViewById(R.id.list_main)
         contactList.adapter = adapter
         contactList.setOnItemClickListener { parent, view, position, id ->
             var intent = Intent(this, ChatActivity::class.java)
+            intent.putExtra(FirebaseUtil.CONTACT_NAME, contacts.get(position).name.toString())
+            startActivity(intent)
+        }
+        main_header.setOnClickListener {
+            var intent = Intent(this, AccountActivity::class.java)
+            intent.putExtra(SharedPreferenceUtil.USER_NAME, userName)
             startActivity(intent)
         }
     }
 
     fun test(){
-        FirebaseUtil.initFireBase()
+//        FirebaseUtil.initFireBase()
 //        FirebaseUtil.uploadDataTest()
-        FirebaseUtil.loadDataTest()
+//        FirebaseUtil.loadDataTest()
     }
 
     /** Request for permission and initialize data**/
     fun initData(){
+        FirebaseUtil.initFireBase()
         // Get Contact permission at runtime
         AndPermission.with(this)
             .runtime()
@@ -77,7 +88,6 @@ class MainActivity : AppCompatActivity() {
             .permission(Permission.Group.CONTACTS)
             .onGranted(Action { permissions: List<String?>? ->
                 getContacts()
-                Log.e("Main",contacts.toString())
                 initView()
             })
             .onDenied(Action { permissions: List<String?>? -> })
@@ -114,6 +124,7 @@ class MainActivity : AppCompatActivity() {
                             val phoneNumValue = cursorPhone.getString(
                                 cursorPhone.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
                             contacts.add(Contact(name, phoneNumValue))
+//                            FirebaseUtil.uploadContact(Contact(name, phoneNumValue), name)
                             Log.e("Name ===>",phoneNumValue);
                         }
                     }
@@ -126,40 +137,39 @@ class MainActivity : AppCompatActivity() {
         return
     }
 
-    fun initFireBase(){
-        Log.i(tag, "Main Firebase initializing......")
+    fun loadChats(uName: String) {
+        Log.i(FirebaseUtil.tag, "Loading......")
+        var chatList: ArrayList<String> = ArrayList()
 
-        db =  FirebaseFirestore.getInstance()
-        var docRef = db.collection("Contact").document("contact")
+        var docRef = db.collection("Chat")
+        docRef.get().addOnSuccessListener {
+            for(item in it){
+                Log.i(FirebaseUtil.tag, "Chats:" + item.id)
+                if (item.id.contains(userName)){
+                    chatList.add(item.id)
+                    addChatListener(item.id)
+                }
+            }
+
+        }.addOnFailureListener {
+            Log.i(FirebaseUtil.tag, "Error load document") }
+    }
+
+    fun addChatListener(name: String){
+        var docRef = db.collection("Chat").document(name)
         docRef.addSnapshotListener{snapshot, e ->
             if (e != null){
-                Log.i(tag, "Update Error! ")
+                Log.i(FirebaseUtil.tag, "Update Error! ")
                 return@addSnapshotListener
             }
             if (snapshot != null && snapshot.exists()) {
-                Log.i(tag, "Message:" + snapshot.getString(KEY_NAME))
-                Log.i(tag, "Message:" + snapshot.getString(KEY_NUMBER))
+                Log.d(FirebaseUtil.tag, "Updated")
             } else {
-                Log.d(tag, "Current data: null")
+                Log.d(FirebaseUtil.tag, "Current data: null")
             }
         }
     }
 
-    fun loadDataTest(){
-        Log.i(tag, "retrieve testing......")
-
-        var docRef = db.collection("Contact").document("contact")
-        docRef.get().addOnSuccessListener {
-            if(it.exists()){
-                Log.i(tag, "Message:" + it.getString(KEY_NAME))
-                Log.i(tag, "Message:" + it.getString(KEY_NUMBER))
-            }else{
-                Log.i(tag, "Null exist")
-            }
-        }.addOnFailureListener {
-            Log.i(tag, "Error load document") }
-
-    }
 
 
 }

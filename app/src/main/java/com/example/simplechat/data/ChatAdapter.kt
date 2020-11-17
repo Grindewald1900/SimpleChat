@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.core.view.isVisible
 import com.example.simplechat.R
 import com.example.simplechat.entity.ChatMessage
 
@@ -17,11 +18,19 @@ class ChatAdapter(activity: Activity, val resourceId:Int, data:List<ChatMessage>
         }else{
             view = convertView
         }
+        val photo1 : com.kproduce.roundcorners.CircleImageView = view.findViewById(R.id.chat_img)
+        val photo2 : com.kproduce.roundcorners.CircleImageView = view.findViewById(R.id.chat_img2)
         val chatMsg : TextView = view.findViewById(R.id.chat_message)
-
+        val chatTime : TextView = view.findViewById(R.id.chat_time)
         val chat = getItem(position)
         if(null != chat){
+            if(chat.msg.contains(chat.userName)){
+                photo2.visibility = View.INVISIBLE
+            }else{
+                photo1.visibility = View.INVISIBLE
+            }
             chatMsg.text = chat.msg
+            chatTime.text = chat.name
         }
         return view
     }

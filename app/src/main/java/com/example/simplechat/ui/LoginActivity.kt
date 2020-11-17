@@ -1,20 +1,20 @@
 package com.example.simplechat.ui
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import com.example.simplechat.R
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.ErrorCodes
-import com.firebase.ui.auth.IdpResponse
+import com.example.simplechat.data.SharedPreferenceUtil
+import com.example.simplechat.entity.Contact
+import com.example.simplechat.tool.FirebaseUtil
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_login.*
-import org.jetbrains.anko.design.longSnackbar
-import org.jetbrains.anko.indeterminateProgressDialog
+import kotlinx.android.synthetic.main.activity_register.*
 
 class LoginActivity : AppCompatActivity() {
-    private val RC_SIGN_IN = 1
-    private val signInProviders = listOf(AuthUI.IdpConfig.EmailBuilder().setAllowNewAccounts(true).setRequireName(true).build())
+    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,46 +22,41 @@ class LoginActivity : AppCompatActivity() {
         initView()
     }
 
-    private fun initView(){
-        account_sign_in.setOnClickListener {
-            val intent = AuthUI.getInstance().createSignInIntentBuilder()
-                .setAvailableProviders(signInProviders)
-                .setLogo(R.drawable.pic_chat)
-                .build()
-            startActivityForResult(intent, RC_SIGN_IN)
+    /** Initialize main view**/
+    fun initView() {
+        bt_login_sign.setOnClickListener {
+            et_login_name.text.ifEmpty {
+                Toast.makeText(this, resources.getString(R.string.empty_name), Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            et_login_pwd.text.ifEmpty {
+                Toast.makeText(this, resources.getString(R.string.empty_pwd), Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+            loadContact(et_login_name.text.toString())
+
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
-
-            if (resultCode == Activity.RESULT_OK) {
-                val progressDialog = indeterminateProgressDialog("Setting up your account")
-//                startActivity(intentFor<MainActivity>().newTask().clearTask())
-//                progressDialog.dismiss()
-
-//                FirestoreTools.initCurrentUserIfFirstTime {
-//                    startActivity(intentFor<MainActivity>().newTask().clearTask())
-//
-//                    val registrationToken = FirebaseInstanceId.getInstance().token
-//                    MyFirebaseInstanceIDService.addTokenToFirestore(registrationToken)
-//
-//                    progressDialog.dismiss()
-//                }
-            }
-            else if (resultCode == Activity.RESULT_CANCELED) {
-                if (response == null) return
-
-                when (response.error?.errorCode) {
-                    ErrorCodes.NO_NETWORK ->
-                        longSnackbar(constraint_layout, "No network")
-                    ErrorCodes.UNKNOWN_ERROR ->
-                        longSnackbar(constraint_layout, "Unknown error")
+    fun loadContact(name: String) {
+        var docRef = db.collection("Contact").document(name)
+        docRef.get().addOnSuccessListener {
+            if(it.exists()){
+                if(it.getString(FirebaseUtil.KEY_PWD) == et_login_pwd.text.toString()){
+                    SharedPreferenceUtil.setSharedPreference(this, SharedPreferenceUtil.USER_NAME, et_login_name.text.toString())
+                    var intent = Intent(this, MainActivity::class.java)
+                    intent.putExtra(SharedPreferenceUtil.USER_NAME, et_login_name.text.toString())
+                    startActivity(intent)
+                }else{
+                    Toast.makeText(this, resources.getString(R.string.wrong_pwd), Toast.LENGTH_LONG).show()
                 }
+                Log.i(FirebaseUtil.tag, "Name:" + it.getString(FirebaseUtil.KEY_NAME))
+                Log.i(FirebaseUtil.tag, "Message:" + it.getString(FirebaseUtil.KEY_NUMBER))
+                Log.i(FirebaseUtil.tag, "Password:" + it.getString(FirebaseUtil.KEY_PWD))
+            }else{
+                Log.i(FirebaseUtil.tag, "Not exist")
             }
-        }
+        }.addOnFailureListener {
+            Log.i(FirebaseUtil.tag, "Error load document") }
     }
 }

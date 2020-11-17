@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dimen_60">
     <com.kproduce.roundcorners.CircleImageView
-        android:id="@+id/contact_img"
+        android:id="@+id/chat_img"
         android:layout_width="@dimen/dimen_50"
         android:layout_height="@dimen/dimen_50"
         android:layout_marginLeft="@dimen/dimen_20"
@@ -21,9 +21,33 @@
         android:layout_height="wrap_content"
         android:text="Harry potter"
         android:layout_marginLeft="@dimen/dimen_20"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/chat_time"
+        app:layout_constraintLeft_toRightOf="@id/chat_img"
+        app:layout_constraintRight_toLeftOf="@id/chat_img2"
+        />
+    <TextView
+        android:id="@+id/chat_time"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Harry potter"
+        android:layout_marginLeft="@dimen/dimen_20"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/chat_message"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/chat_img"
+        app:layout_constraintRight_toLeftOf="@id/chat_img2"
+        />
+
+    <com.kproduce.roundcorners.CircleImageView
+        android:id="@+id/chat_img2"
+        android:layout_width="@dimen/dimen_50"
+        android:layout_height="@dimen/dimen_50"
+        android:layout_marginRight="@dimen/dimen_20"
+        android:src="@drawable/photo1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/contact_img"
-        />
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

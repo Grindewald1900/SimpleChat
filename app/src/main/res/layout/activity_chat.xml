@@ -14,11 +14,11 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_chat_input"
+        app:layout_constraintBottom_toTopOf="@id/et_chat_input"
         />
 
-    <TextView
-        android:id="@+id/tv_chat_input"
+    <EditText
+        android:id="@+id/et_chat_input"
         android:layout_width="0dp"
         android:layout_height="@dimen/dimen_50"
         android:layout_marginRight="@dimen/dimen_10"
@@ -27,14 +27,21 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/ib_chat_enter"/>
 
-    <ImageButton
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
         android:id="@+id/ib_chat_enter"
         android:layout_width="@dimen/dimen_80"
         android:layout_height="@dimen/dimen_40"
-        app:layout_constraintTop_toTopOf="@id/tv_chat_input"
-        app:layout_constraintLeft_toRightOf="@id/tv_chat_input"
+        android:text="Enter"
+        android:textSize="15sp"
+        android:textColor="@color/qmui_config_color_white"
+        android:layout_marginTop="@dimen/dimen_40"
+        android:layout_marginLeft="@dimen/dimen_40"
+        android:gravity="center"
+        app:qmui_borderColor="@color/qmui_config_color_white"
+        app:qmui_backgroundColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@id/et_chat_input"
+        app:layout_constraintLeft_toRightOf="@id/et_chat_input"
         app:layout_constraintRight_toRightOf="parent"
         />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

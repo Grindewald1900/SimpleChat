@@ -1,10 +1,11 @@
 package com.example.simplechat.tool
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.example.simplechat.ui.LoginActivity
+import com.example.simplechat.data.SharedPreferenceUtil
 import com.example.simplechat.ui.MainActivity
-import com.google.firebase.auth.FirebaseAuth
+import com.example.simplechat.ui.SelectionActivity
 import org.jetbrains.anko.startActivity
 
 class SignHelper : AppCompatActivity() {
@@ -12,11 +13,12 @@ class SignHelper : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (FirebaseAuth.getInstance().currentUser == null)
+        Log.i(FirebaseUtil.tag, "User name: " + SharedPreferenceUtil.getSharedPreference(this, SharedPreferenceUtil.USER_NAME, ""))
+        if (!SharedPreferenceUtil.getSharedPreference(this, SharedPreferenceUtil.USER_NAME, "").equals(""))
             startActivity<MainActivity>()
 //            startActivity<LoginActivity>()
         else
-            startActivity<MainActivity>()
+            startActivity<SelectionActivity>()
         finish()
     }
 }

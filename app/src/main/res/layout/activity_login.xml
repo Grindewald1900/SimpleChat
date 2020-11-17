@@ -1,62 +1,190 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraint_layout"
-    android:layout_width="match_parent"
+    tools:context=".ui.LoginActivity"
     android:layout_height="match_parent"
-    tools:context=".ui.LoginActivity">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="@dimen/dimen_200"
-        android:layout_height="@dimen/dimen_200"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/pic_chat"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+    android:layout_width="match_parent">
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/tv_login_logo"
+        android:layout_width="@dimen/dimen_260"
+        android:layout_height="@dimen/dimen_70"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/app_name"
+        android:textColor="@color/qmui_config_color_white"
+        android:textStyle="bold"
+        android:textSize="45sp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dimen_80"
+        app:qmui_borderColor="@color/colorPrimary"
+        app:qmui_backgroundColor="@color/colorPrimary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.252" />
-
-
-    <Button
-        android:id="@+id/account_login_in"
+        />
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/tv_login_name"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:text="@string/name"
+        android:textSize="15sp"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="@dimen/dimen_40"
+        android:layout_marginLeft="@dimen/dimen_40"
+        app:qmui_borderColor="@color/colorPrimary"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_login_logo"
+        />
+    <EditText
+        android:id="@+id/et_login_name"
+        android:layout_width="@dimen/dimen_240"
+        android:layout_height="@dimen/dimen_50"
+        android:layout_marginLeft="@dimen/dimen_20"
+        app:layout_constraintTop_toTopOf="@id/tv_login_name"
+        app:layout_constraintBottom_toBottomOf="@id/tv_login_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_login_name"
+        />
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/tv_login_pass"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:text="@string/password"
+        android:textSize="15sp"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="@dimen/dimen_40"
+        android:layout_marginLeft="@dimen/dimen_40"
+        app:qmui_borderColor="@color/colorPrimary"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_login_name"
+        />
+    <EditText
+        android:id="@+id/et_login_pwd"
+        android:layout_width="@dimen/dimen_240"
+        android:layout_height="@dimen/dimen_50"
+        android:layout_marginLeft="@dimen/dimen_20"
+        app:layout_constraintTop_toTopOf="@id/tv_login_pass"
+        app:layout_constraintBottom_toBottomOf="@id/tv_login_pass"
+        app:layout_constraintLeft_toRightOf="@id/tv_login_name"
+        />
+    <TextView
+        android:id="@+id/tv_login_forget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="?attr/colorPrimary"
-        android:text="Login  In"
-        android:textColor="@android:color/white"
-        app:layout_behavior="com.resocoder.productivity.weeksweep.behaviors.ShrinkBehavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/forgot_password"
+        android:textSize="15sp"
+        android:layout_marginTop="@dimen/dimen_40"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.257" />
-    <Button
-        android:id="@+id/account_sign_in"
+        app:layout_constraintRight_toLeftOf="@id/tv_login_register"
+        app:layout_constraintTop_toBottomOf="@id/tv_login_pass"
+        />
+    <TextView
+        android:id="@+id/tv_login_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="?attr/colorPrimary"
-        android:text="Sign  In"
-        android:textColor="@android:color/white"
-        app:layout_behavior="com.resocoder.productivity.weeksweep.behaviors.ShrinkBehavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="@string/register"
+        android:textSize="15sp"
+        android:layout_marginTop="@dimen/dimen_40"
+        app:layout_constraintLeft_toRightOf="@id/tv_login_forget"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/account_login_in"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintTop_toBottomOf="@id/tv_login_pass"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_login_bu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_50"
+        android:orientation="horizontal"
+        android:layout_marginRight="@dimen/dimen_40"
+        app:layout_constraintTop_toBottomOf="@id/tv_login_forget"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        >
+        <ImageView
+            android:id="@+id/iv_login_bu"
+            android:layout_width="@dimen/dimen_50"
+            android:layout_height="@dimen/dimen_50"
+            android:src="@drawable/icon_login"
+            />
+
+        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+            android:id="@+id/bt_login_sign"
+            android:layout_width="@dimen/dimen_240"
+            android:layout_height="@dimen/dimen_50"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:text="@string/sign"
+            android:textColor="@color/qmui_config_color_white"
+            android:textSize="16sp"
+            android:gravity="center"
+            app:qmui_backgroundColor="@color/colorPrimary"
+            app:qmui_borderColor="@color/colorPrimary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_login_google"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_50"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/ll_login_bu"
+        app:layout_constraintRight_toRightOf="@id/ll_login_bu"
+        >
+        <ImageView
+            android:id="@+id/iv_login_google"
+            android:layout_width="@dimen/dimen_50"
+            android:layout_height="@dimen/dimen_50"
+            android:src="@drawable/icon_google"
+            />
+        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+            android:id="@+id/bt_login_google"
+            android:layout_width="@dimen/dimen_240"
+            android:layout_height="@dimen/dimen_50"
+            android:text="@string/google"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/qmui_config_color_white"
+            android:layout_marginLeft="@dimen/dimen_10"
+            app:qmui_borderColor="@color/google"
+            app:qmui_backgroundColor="@color/google"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_login_facebook"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/ll_login_google"
+        app:layout_constraintRight_toRightOf="@id/ll_login_google"
+        >
+        <ImageView
+            android:id="@+id/iv_login_facebook"
+            android:layout_width="@dimen/dimen_50"
+            android:layout_height="@dimen/dimen_50"
+            android:src="@drawable/icon_facebook"
+            app:layout_constraintTop_toBottomOf="@id/iv_login_google"
+            app:layout_constraintLeft_toLeftOf="@id/bt_login_sign"
+            />
+        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+            android:id="@+id/bt_login_facebook"
+            android:layout_width="@dimen/dimen_240"
+            android:layout_height="@dimen/dimen_50"
+            android:text="@string/facebook"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textColor="@color/qmui_config_color_white"
+            android:layout_marginLeft="@dimen/dimen_10"
+            app:qmui_borderColor="@color/facebook"
+            app:qmui_backgroundColor="@color/facebook"
+            app:layout_constraintTop_toTopOf="@id/iv_login_facebook"
+            app:layout_constraintBottom_toBottomOf="@id/iv_login_facebook"
+            app:layout_constraintLeft_toRightOf="@id/iv_login_facebook"
+            />
+    </LinearLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

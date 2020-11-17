@@ -1,4 +1,4 @@
 package com.example.simplechat.entity
 
-data class Contact (val name:String? = "", val phoneNumber:String? = ""){
+data class Contact (val name:String? = "", val phoneNumber:String? = "", val password:String? = ""){
 }
